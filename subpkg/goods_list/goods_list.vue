@@ -46,7 +46,7 @@
 			this.getGoodsList()
 		},
 		methods: {
-			async getGoodsList() {
+			async getGoodsList(cb) {
 				// 打开节流阀
 				this.isloading = true
 				const {
@@ -54,6 +54,8 @@
 				} = await uni.$http.get('/api/public/v1/goods/search', this.queryObj)
 				//关闭节流阀
 				this.isloading = false
+				// 只要数据请求完毕，就立即按需调用 cb 回调函数
+				cb && cb()
 				if (res.meta.status !== 200) return uni.$showMsg()
 
 				// 请求成功后才让页码+1
@@ -70,12 +72,25 @@
 				}
 			}
 		},
+		// 上拉触底事件
 		onReachBottom() {
 			// 当节流阀打开时，直接返回
 			if (this.isloading) return
 			// 当页码达到最大页码后，直接返回
 			if (this.queryObj.pagenum > this.maxPageNum) return
 			this.getGoodsList()
+		},
+		// 下拉刷新事件
+		onPullDownRefresh() {
+			// 重置页面数据
+			this.queryObj.pagenum = 1
+			this.total = 0
+			this.isloading = false
+			this.maxPageNum = 2
+			this.goodsList = []
+
+			// 重新发起请求，请求完成后关闭上拉刷新事件
+			this.getGoodsList(() => uni.stopPullDownRefresh())
 		}
 	}
 </script>
