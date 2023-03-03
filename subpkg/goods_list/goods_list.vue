@@ -5,6 +5,11 @@
 				<goods-item :goods="goods"></goods-item>
 			</block>
 		</view>
+		<view class="bottom-box" v-if="queryObj.pagenum >= maxPageNum">
+			<view class="buttom-text">
+				我可是有底线的哦...
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -26,6 +31,10 @@
 				goodsList: [],
 				// 商品总数
 				total: 0,
+				// 最大页码数
+				maxPageNum: 2,
+				// 节流阀
+				isloading: false
 			};
 		},
 		onLoad(options) {
@@ -38,19 +47,49 @@
 		},
 		methods: {
 			async getGoodsList() {
+				// 打开节流阀
+				this.isloading = true
 				const {
 					data: res
 				} = await uni.$http.get('/api/public/v1/goods/search', this.queryObj)
+				//关闭节流阀
+				this.isloading = false
 				if (res.meta.status !== 200) return uni.$showMsg()
 
-				this.goodsList = res.message.goods
+				// 请求成功后才让页码+1
+				this.queryObj.pagenum++
+				this.goodsList = [...this.goodsList, ...res.message.goods]
 				this.total = res.message.total
-				this.queryObj.pagenum += 1
+				this.calcPageCount()
+			},
+			calcPageCount() {
+				if (this.total % this.queryObj.pagesize) {
+					this.maxPageNum = parseInt(this.total / this.queryObj.pagesize) + 1
+				} else {
+					this.maxPageNum = parseInt(this.total / this.queryObj.pagesize)
+				}
 			}
+		},
+		onReachBottom() {
+			// 当节流阀打开时，直接返回
+			if (this.isloading) return
+			// 当页码达到最大页码后，直接返回
+			if (this.queryObj.pagenum > this.maxPageNum) return
+			this.getGoodsList()
 		}
 	}
 </script>
 
 <style lang="scss">
+	.bottom-box {
+		margin-top: 10px;
+		padding: 0 20px;
 
+		.buttom-text {
+			font-size: 14px;
+			color: #808080;
+			border-top: 1px solid #f0f0f0;
+			text-align: center;
+		}
+	}
 </style>
