@@ -1,9 +1,9 @@
 <template>
 	<view>
 		<view class="goods-list">
-			<block v-for="(goods, i) in goodsList" :key="i">
+			<view v-for="(goods, i) in goodsList" :key="i" @click="gotoDetail(goods)">
 				<goods-item :goods="goods"></goods-item>
-			</block>
+			</view>
 		</view>
 		<view class="bottom-box" v-if="queryObj.pagenum >= maxPageNum">
 			<view class="buttom-text">
@@ -70,6 +70,11 @@
 				} else {
 					this.maxPageNum = parseInt(this.total / this.queryObj.pagesize)
 				}
+			},
+			gotoDetail(goods) {
+				uni.navigateTo({
+					url: "/subpkg/goods_detail/goods_detail?goods_id=" + goods.goods_id
+				})
 			}
 		},
 		// 上拉触底事件

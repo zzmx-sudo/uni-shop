@@ -10,7 +10,7 @@ import {
 uni.$http = $http
 
 // 配置请求根路径
-$http.baseUrl = 'http://www.uinav.com'
+$http.baseUrl = 'https://www.uinav.com'
 
 // 配置请求拦截器
 // 网络请求前拦截器，显示loading效果
