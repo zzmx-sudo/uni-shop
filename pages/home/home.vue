@@ -50,7 +50,10 @@
 </template>
 
 <script>
+	import BadgeMix from '@/mixins/tarbar_badge.js'
+
 	export default {
+		mixins: [BadgeMix],
 		data() {
 			return {
 				// 轮播图数据
