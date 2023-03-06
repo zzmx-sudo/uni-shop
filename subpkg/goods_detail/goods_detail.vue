@@ -46,12 +46,16 @@
 			...mapGetters('cart', ['cartCount'])
 		},
 		watch: {
-			// 监听cartCount值的变化，通过第一个参数
-			cartCount(newValue) {
-				const findResult = this.options.find(x => x.text === '购物车')
-				if (findResult) {
-					findResult.info = newValue
-				}
+			cartCount: {
+				// handler属性用来定义侦听器的 function 处理函数
+				handler(newValue) {
+					const findResult = this.options.find(x => x.text === '购物车')
+					if (findResult) {
+						findResult.info = newValue
+					}
+				},
+				// immediate 属性用来声明此侦听器，是否在页面首次加载完毕后立即调用
+				immediate: true
 			}
 		},
 		data() {
@@ -66,7 +70,7 @@
 				}, {
 					icon: 'cart',
 					text: '购物车',
-					info: this.cartCount
+					info: 0
 				}],
 				buttonGroup: [{
 						text: '加入购物车',
