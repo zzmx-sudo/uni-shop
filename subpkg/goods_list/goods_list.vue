@@ -106,6 +106,7 @@
 		padding: 0 20px;
 
 		.buttom-text {
+			padding-top: 5px;
 			font-size: 14px;
 			color: #808080;
 			border-top: 1px solid #f0f0f0;
