@@ -17,5 +17,10 @@ export default {
 				text: this.cartCount + ''
 			})
 		}
+	},
+	watch: {
+		cartCount() {
+			this.setBadge()
+		}
 	}
 }

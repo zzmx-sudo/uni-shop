@@ -3,6 +3,7 @@
 		<view class="goods-item">
 			<!-- 左侧的盒子 -->
 			<view class="goods-item-left">
+				<slot name="radio"></slot>
 				<image :src="goods.goods_small_logo || defaultPic" class="goods-pic"></image>
 			</view>
 			<!-- 右侧的盒子 -->
@@ -12,6 +13,7 @@
 				<!-- 商品信息 -->
 				<view class="goods-info-box">
 					<view class="goods-price">￥{{goods.goods_price | toFixed}}</view>
+					<slot name="numberbox"></slot>
 				</view>
 			</view>
 		</view>
@@ -43,12 +45,17 @@
 
 <style lang="scss">
 	.goods-item {
+		width: 750rpx;
+		box-sizing: border-box;
 		display: flex;
 		padding: 10px 5px;
 		border-bottom: 1px solid #f0f0f0;
 
 		.goods-item-left {
 			margin-right: 7px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
 
 			.goods-pic {
 				width: 100px;
@@ -59,6 +66,7 @@
 
 		.goods-item-right {
 			display: flex;
+			flex: 1;
 			flex-direction: column;
 			justify-content: space-between;
 
@@ -67,6 +75,10 @@
 			}
 
 			.goods-info-box {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+
 				.goods-price {
 					color: #C00000;
 					font-size: 16px;

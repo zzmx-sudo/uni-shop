@@ -28,6 +28,31 @@ export default {
 		},
 		savaToStorage(state) {
 			uni.setStorageSync('cart', JSON.stringify(state.cart))
+		},
+		// 更新本地存储的商品勾选状态
+		updateGoodsState(state, goods) {
+			const findResult = state.cart.find(x => x.goods_id === goods.goods_id)
+
+			if (findResult) {
+				findResult.goods_state = goods.goods_state
+
+				this.commit('cart/savaToStorage')
+			}
+		},
+		// 更新本地存储的商品数量
+		updateGoodsCount(state, goods) {
+			const findResult = state.cart.find(x => x.goods_id === goods.goods_id)
+
+			if (findResult) {
+				findResult.goods_count = goods.goods_count
+
+				this.commit('cart/savaToStorage')
+			}
+		},
+		removeGoods(state, goods) {
+			state.cart = state.cart.filter(x => x.goods_id !== goods.goods_id)
+
+			this.commit('cart/savaToStorage')
 		}
 	},
 
